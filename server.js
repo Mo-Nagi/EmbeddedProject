@@ -1,15 +1,17 @@
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
 
 const app = express();
-const port = process.env.PORT || 3000; // يستخدم بورت Render تلقائيًا
+const port = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(cors());
 
+
 let sensorData = { distance: 0 };
 
-// 📌 نقطة استقبال البيانات من ESP + SIM800L
+
 app.post("/send-data", (req, res) => {
     const { distance } = req.body;
     if (distance !== undefined) {
@@ -21,10 +23,18 @@ app.post("/send-data", (req, res) => {
     }
 });
 
-// 📌 نقطة لجلب البيانات وعرضها في الفرونت إند
+
 app.get("/get-data", (req, res) => {
     res.json(sensorData);
 });
+
+
+app.use(express.static(path.join(__dirname, "../frontend")));
+
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "../frontend", "index.html"));
+});
+
 
 app.listen(port, () => {
     console.log(`🚀 Server running at http://localhost:${port}`);
