@@ -8,9 +8,7 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 app.use(cors());
 
-
 let sensorData = { distance: 0 };
-
 
 app.post("/send-data", (req, res) => {
     const { distance } = req.body;
@@ -23,18 +21,15 @@ app.post("/send-data", (req, res) => {
     }
 });
 
-
 app.get("/get-data", (req, res) => {
     res.json(sensorData);
 });
 
-
-app.use(express.static(path.join(__dirname, "../frontend")));
+app.use(express.static(__dirname));
 
 app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "../frontend", "index.html"));
+    res.sendFile(path.join(__dirname, "index.html"));
 });
-
 
 app.listen(port, () => {
     console.log(`🚀 Server running at http://localhost:${port}`);
