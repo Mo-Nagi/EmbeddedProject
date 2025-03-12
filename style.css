@@ -1,4 +1,4 @@
-body { 
+body {
     font-family: Arial, sans-serif;
     text-align: center;
     background-color: #282c36;
@@ -43,7 +43,6 @@ button {
 
 /* ✅ Popup Window for Logs with Animation */
 .popup {
-    display: none;
     position: fixed;
     left: 0;
     top: 0;
@@ -51,14 +50,16 @@ button {
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
     opacity: 0;
-    transition: opacity 0.3s ease-in-out, visibility 0.3s;
     visibility: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
 }
 
 .popup-content {
     background-color: white;
     color: black;
-    margin: 10% auto;
     padding: 20px;
     border-radius: 10px;
     width: 50%;
@@ -68,7 +69,6 @@ button {
 }
 
 .popup.show {
-    display: block;
     opacity: 1;
     visibility: visible;
 }
