@@ -15,7 +15,7 @@ const db = mysql.createConnection({
     host: process.env.MYSQLHOST,
     user: process.env.MYSQLUSER,
     password: process.env.MYSQL_ROOT_PASSWORD,
-    database: process.env.MYSQLDATABASE"
+    database: process.env.MYSQLDATABASE,
 });
 
 db.connect(err => {
