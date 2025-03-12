@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
@@ -10,12 +11,12 @@ app.use(express.json());
 app.use(cors());
 app.use(express.static(__dirname));
 
-
 const db = mysql.createConnection({
     host: process.env.MYSQLHOST,
     user: process.env.MYSQLUSER,
-    password: process.env.MYSQL_ROOT_PASSWORD,
+    password: process.env.MYSQLPASSWORD,
     database: process.env.MYSQLDATABASE,
+    port: process.env.MYSQLPORT
 });
 
 db.connect(err => {
@@ -23,30 +24,29 @@ db.connect(err => {
         console.error(" MySQL Connection Failed:", err);
         return;
     }
-    console.log(" Connected to MySQL Database");
+    console.log("Connected to MySQL Database");
 });
 
-
-db.query(`
+const createTableQuery = `
     CREATE TABLE IF NOT EXISTS logs (
         id INT AUTO_INCREMENT PRIMARY KEY,
         distance FLOAT NOT NULL,
         timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
-`, (err) => {
+`;
+db.query(createTableQuery, (err) => {
     if (err) console.error(" Error creating table:", err);
 });
-
 
 app.post("/send-data", (req, res) => {
     const { distance } = req.body;
     if (distance !== undefined) {
         db.query("INSERT INTO logs (distance) VALUES (?)", [distance], (err) => {
             if (err) {
-                console.error(" Error inserting data:", err);
+                console.error("Error inserting data:", err);
                 res.status(500).json({ error: "Database error" });
             } else {
-                console.log(`📡 Data received: ${distance} cm`);
+                console.log(` Data received: ${distance} cm`);
                 res.json({ message: "Data saved successfully!" });
             }
         });
@@ -54,7 +54,6 @@ app.post("/send-data", (req, res) => {
         res.status(400).json({ error: "Invalid data!" });
     }
 });
-
 
 app.get("/get-data", (req, res) => {
     db.query("SELECT * FROM logs ORDER BY timestamp DESC LIMIT 1", (err, results) => {
@@ -67,7 +66,6 @@ app.get("/get-data", (req, res) => {
     });
 });
 
-
 app.get("/logs", (req, res) => {
     db.query("SELECT * FROM logs ORDER BY timestamp DESC", (err, results) => {
         if (err) {
@@ -79,12 +77,10 @@ app.get("/logs", (req, res) => {
     });
 });
 
-
 app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "index.html"));
 });
 
-
-app.listen(port, () => {
-    console.log(` Server running at http://localhost:${port}`);
+app.listen(port, "0.0.0.0", () => {
+    console.log(`🚀 Server running at http://0.0.0.0:${port}`);
 });
