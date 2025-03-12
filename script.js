@@ -1,4 +1,4 @@
-const apiUrl = "https://embeddedproject-production.up.railway.app";
+const apiUrl = window.location.origin;
 
 async function fetchData() {
     try {
