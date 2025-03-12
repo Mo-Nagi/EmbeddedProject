@@ -9,7 +9,6 @@ const port = process.env.PORT ;
 app.use(express.json());
 app.use(cors());
 
-// ✅ إنشاء اتصال بقاعدة البيانات مع Debug Mode
 const db = mysql.createConnection({
     host: process.env.MYSQLHOST,
     user: process.env.MYSQLUSER,
@@ -18,7 +17,6 @@ const db = mysql.createConnection({
     port: process.env.MYSQLPORT
 });
 
-// ✅ التحقق من الاتصال وطباعة التفاصيل
 db.connect(err => {
     if (err) {
         console.error("❌ MySQL Connection Failed:");
@@ -31,7 +29,6 @@ db.connect(err => {
     console.log("✅ Connected to MySQL Database");
 });
 
-// ✅ Route لاختبار قاعدة البيانات
 app.get("/test-db", (req, res) => {
     db.query("SHOW DATABASES;", (err, results) => {
         if (err) {
