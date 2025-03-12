@@ -20,13 +20,22 @@ const db = mysql.createConnection({
     port: process.env.MYSQLPORT || 3306
 });
 
-// ✅ التأكد من الاتصال بقاعدة البيانات
+// ✅ التأكد من الاتصال بقاعدة البيانات وإعادة المحاولة في حالة الفشل
 db.connect(err => {
     if (err) {
         console.error("❌ MySQL Connection Failed:", err);
-        return;
+        setTimeout(() => {
+            console.log("🔄 Retrying database connection...");
+            db.connect();
+        }, 5000); // إعادة المحاولة بعد 5 ثواني
+    } else {
+        console.log("✅ Connected to MySQL Database");
     }
-    console.log("✅ Connected to MySQL Database");
+});
+
+// ✅ إنشاء قاعدة البيانات إذا لم تكن موجودة
+db.query("CREATE DATABASE IF NOT EXISTS ??", [process.env.MYSQLDATABASE], (err) => {
+    if (err) console.error("❌ Error creating database:", err);
 });
 
 // ✅ إنشاء جدول لو مش موجود
@@ -98,6 +107,18 @@ app.get("/test-db", (req, res) => {
 // ✅ توجيه أي طلب غير معروف إلى index.html
 app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "index.html"));
+});
+
+// ✅ منع Railway من إيقاف السيرفر تلقائيًا بسبب عدم النشاط
+setInterval(() => {
+    console.log("🔄 Keeping server alive...");
+}, 30000);
+
+// ✅ التعامل مع إشارة الإيقاف SIGTERM من Railway
+process.on("SIGTERM", () => {
+    console.log("🚨 SIGTERM received! Cleaning up before exit...");
+    db.end(); // إغلاق الاتصال بقاعدة البيانات قبل الإنهاء
+    process.exit(0);
 });
 
 // ✅ تشغيل السيرفر على 0.0.0.0 لحل مشاكل الوصول في Railway
