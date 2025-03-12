@@ -7,43 +7,36 @@ const port = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(cors());
-app.use(express.static(__dirname));
 
-// ✅ Array لتخزين البيانات بدل قاعدة البيانات
-let logs = [];
+// 📌 متغير لتخزين بيانات المستشعر
+let sensorData = { distance: 0 };
 
-// ✅ استقبال البيانات من SIM800L وتخزينها في الذاكرة
+// ✅ API لاستقبال البيانات من SIM800L
 app.post("/send-data", (req, res) => {
     const { distance } = req.body;
     if (distance !== undefined) {
-        logs.push({ distance, timestamp: new Date().toISOString() });
-        console.log(`📡 Data received: ${distance} cm`);
-        res.json({ message: "Data saved successfully!" });
+        sensorData.distance = distance;
+        console.log("Received Data:", sensorData);
+        res.json({ message: "Data received successfully!", data: sensorData });
     } else {
         res.status(400).json({ error: "Invalid data!" });
     }
 });
 
-// ✅ API لجلب آخر قراءة فقط
+// ✅ API لجلب البيانات لعرضها في الفرونت إند
 app.get("/get-data", (req, res) => {
-    if (logs.length > 0) {
-        res.json(logs[logs.length - 1]);
-    } else {
-        res.json({ distance: 0 });
-    }
+    res.json(sensorData);
 });
 
-// ✅ API لجلب جميع القراءات السابقة (Logs)
-app.get("/logs", (req, res) => {
-    res.json(logs);
-});
+// ✅ جعل Express يخدم الملفات الثابتة (HTML, CSS, JS) من نفس المجلد
+app.use(express.static(__dirname));
 
-// ✅ توجيه أي طلب غير معروف إلى index.html
+// ✅ أي طلب غير معروف يرجع `index.html` علشان الفرونت إند يشتغل صح
 app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "index.html"));
 });
 
 // ✅ تشغيل السيرفر
-app.listen(port, "0.0.0.0", () => {
-    console.log(`🚀 Server running at http://0.0.0.0:${port}`);
+app.listen(port, () => {
+    console.log(`🚀 Server running at http://localhost:${port}`);
 });
