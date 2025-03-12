@@ -30,7 +30,7 @@ db.connect(err => {
 
 // ✅ إنشاء جدول لو مش موجود
 const createTableQuery = `
-    CREATE TABLE IF NOT EXISTS logs (
+    CREATE TABLE IF NOT EXISTS logs2 (
         id INT AUTO_INCREMENT PRIMARY KEY,
         sensor1 FLOAT NOT NULL,
         sensor2 FLOAT NOT NULL,
