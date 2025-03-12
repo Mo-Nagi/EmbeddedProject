@@ -2,12 +2,14 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const mysql = require("mysql2");
+const path = require("path");
 
 const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(cors());
+app.use(express.static(path.join(__dirname, "public")));
 
 // ✅ إعداد الاتصال بقاعدة البيانات MySQL
 const db = mysql.createConnection({
@@ -80,6 +82,11 @@ app.get("/logs", (req, res) => {
             res.json(results);
         }
     });
+});
+
+// ✅ Route لتقديم الصفحة الرئيسية
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 // ✅ تشغيل السيرفر
