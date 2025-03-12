@@ -71,18 +71,19 @@ app.post("/send-data", (req, res) => {
 
 // ✅ API لجلب آخر قراءة فقط
 app.get("/get-data", (req, res) => {
-    db.query("SELECT id, distance, DATE_FORMAT(timestamp, '%b %d %h:%i:%s %p') AS formatted_timestamp FROM logs ORDER BY timestamp DESC LIMIT 1", (err, results) => {
+    db.query("SELECT id, distance, DATE_FORMAT(timestamp, '%b %d %r') AS timestamp FROM logs ORDER BY timestamp DESC LIMIT 1", (err, results) => {
         if (err) {
             console.error("❌ Error fetching data:", err);
             res.status(500).json({ error: "Database error" });
         } else {
-            res.json(results.length ? results[0] : { distance: 0, formatted_timestamp: "N/A" });
+            res.json(results.length ? results[0] : { distance: 0, timestamp: "N/A" });
         }
     });
 });
 
+// ✅ API لجلب جميع القراءات السابقة (Logs)
 app.get("/logs", (req, res) => {
-    db.query("SELECT id, distance, DATE_FORMAT(timestamp, '%b %d %h:%i:%s %p') AS formatted_timestamp FROM logs ORDER BY timestamp DESC", (err, results) => {
+    db.query("SELECT id, distance, DATE_FORMAT(timestamp, '%b %d %r') AS timestamp FROM logs ORDER BY timestamp DESC", (err, results) => {
         if (err) {
             console.error("❌ Error fetching logs:", err);
             res.status(500).json({ error: "Database error" });
@@ -91,7 +92,6 @@ app.get("/logs", (req, res) => {
         }
     });
 });
-
 
 // ✅ Route لاختبار الاتصال بقاعدة البيانات يدويًا
 app.get("/test-db", (req, res) => {
@@ -104,6 +104,8 @@ app.get("/test-db", (req, res) => {
         }
     });
 });
+
+
 // ✅ توجيه أي طلب غير معروف إلى index.html
 app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "index.html"));
