@@ -19,14 +19,14 @@ const db = mysql.createConnection({
 
 db.connect(err => {
     if (err) {
-        console.error("❌ MySQL Connection Failed:");
+        console.error(" MySQL Connection Failed:");
         console.error("Error Code:", err.code);
         console.error("Error No:", err.errno);
         console.error("SQL State:", err.sqlState);
         console.error("Message:", err.sqlMessage);
         return;
     }
-    console.log("✅ Connected to MySQL Database");
+    console.log(" Connected to MySQL Database");
 });
 
 app.get("/test-db", (req, res) => {
@@ -39,7 +39,6 @@ app.get("/test-db", (req, res) => {
     });
 });
 
-// ✅ تشغيل السيرفر
 app.listen(port, "0.0.0.0", () => {
     console.log(`🚀 Server running at http://0.0.0.0:${port}`);
 });
