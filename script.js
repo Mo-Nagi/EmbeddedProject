@@ -1,4 +1,4 @@
-const apiUrl = "https://embeddedproject-production.up.railway.app/get-data";
+const apiUrl = "https://embeddedproject-production.up.railway.app";
 
 async function fetchData() {
     try {
