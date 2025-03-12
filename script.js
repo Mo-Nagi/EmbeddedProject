@@ -1,17 +1,21 @@
 
-
 const apiUrl = "https://embeddedproject-production.up.railway.app";
 
-// ✅ جلب آخر قراءة
+// ✅ جلب آخر قراءة من كل سينسور
 async function fetchData() {
     try {
         const response = await fetch(`${apiUrl}/get-data`);
         if (!response.ok) throw new Error(`HTTP Error! Status: ${response.status}`);
         const data = await response.json();
-        document.getElementById("data").textContent = data.distance;
+        
+        document.getElementById("data1").textContent = data.sensor1;
+        document.getElementById("data2").textContent = data.sensor2;
+        document.getElementById("average").textContent = ((data.sensor1 + data.sensor2) / 2).toFixed(2);
     } catch (error) {
         console.error("❌ Error fetching data:", error);
-        document.getElementById("data").textContent = "Error!";
+        document.getElementById("data1").textContent = "Error!";
+        document.getElementById("data2").textContent = "Error!";
+        document.getElementById("average").textContent = "Error!";
     }
 }
 
@@ -22,7 +26,7 @@ async function fetchLogs() {
         if (!response.ok) throw new Error(`HTTP Error! Status: ${response.status}`);
         const logs = await response.json();
         const logsList = document.getElementById("logsList");
-        logsList.innerHTML = logs.map(log => `<li>${log.timestamp}: ${log.distance} cm</li>`).join("");
+        logsList.innerHTML = logs.map(log => `<li>${log.timestamp}: Sensor 1: ${log.sensor1} cm | Sensor 2: ${log.sensor2} cm</li>`).join("");
     } catch (error) {
         console.error("❌ Error fetching logs:", error);
     }
