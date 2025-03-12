@@ -20,7 +20,7 @@ p {
     font-size: 1.5em;
 }
 
-#data {
+#data1, #data2, #average {
     font-size: 2em;
     font-weight: bold;
     color: #ffcc00;
@@ -62,7 +62,6 @@ button {
     text-align: center;
     position: relative;
     margin: auto;
-    transform: translateY(0);
 }
 
 .close {
