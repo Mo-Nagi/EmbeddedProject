@@ -51,7 +51,8 @@ button {
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
     opacity: 0;
-    transition: opacity 0.3s ease-in-out;
+    transition: opacity 0.3s ease-in-out, visibility 0.3s;
+    visibility: hidden;
 }
 
 .popup-content {
@@ -69,6 +70,7 @@ button {
 .popup.show {
     display: block;
     opacity: 1;
+    visibility: visible;
 }
 
 .popup.show .popup-content {
