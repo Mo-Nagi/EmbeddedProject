@@ -1,6 +1,6 @@
 const apiUrl = "https://embeddedproject-production.up.railway.app";
 
-// ✅ جلب آخر قراءة وعرضها في الصفحة
+// ✅ جلب آخر قراءة
 async function fetchData() {
     try {
         const response = await fetch(`${apiUrl}/get-data`);
@@ -13,7 +13,7 @@ async function fetchData() {
     }
 }
 
-// ✅ جلب جميع الـ Logs وعرضها في النافذة الجانبية
+// ✅ جلب جميع الـ Logs
 async function fetchLogs() {
     try {
         const response = await fetch(`${apiUrl}/logs`);
