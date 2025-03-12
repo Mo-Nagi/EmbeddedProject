@@ -10,14 +10,16 @@
     <div class="container">
         <h1>📡 Ultrasonic Sensor Data</h1>
         <p>Distance: <span id="data">Loading...</span> cm</p>
-        <button id="showLogs">📜 Logs</button>
+        <button id="showLogs">📜 Show Logs</button>
     </div>
 
-    <!-- نافذة الـ Logs -->
-    <div id="logsPanel" class="logs-panel">
-        <button id="closeLogs">✖</button>
-        <h2>Previous Readings</h2>
-        <ul id="logsList"></ul>
+    <!-- Popup Window for Logs -->
+    <div id="logsPopup" class="popup">
+        <div class="popup-content">
+            <span class="close" id="closeLogs">&times;</span>
+            <h2>Previous Readings</h2>
+            <ul id="logsList"></ul>
+        </div>
     </div>
 
     <script src="script.js"></script>
