@@ -89,9 +89,11 @@ app.get("/logs", (req, res) => {
 });
 
 // ✅ Route لتقديم الصفحة الرئيسية
+
 app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "public", "index.html"));
+    res.sendFile(path.join(__dirname, "index.html"));
 });
+
 
 // ✅ تشغيل السيرفر
 app.listen(port, "0.0.0.0", () => {
