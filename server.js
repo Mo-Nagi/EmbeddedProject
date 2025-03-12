@@ -71,7 +71,7 @@ app.post("/send-data", (req, res) => {
 
 // ✅ API لجلب آخر قراءة فقط
 app.get("/get-data", (req, res) => {
-    db.query("SELECT id, distance, DATE_FORMAT(timestamp, '%b %d %H:%i:%s') AS formatted_timestamp FROM logs ORDER BY timestamp DESC LIMIT 1", (err, results) => {
+    db.query("SELECT id, distance, DATE_FORMAT(timestamp, '%b %d %h:%i:%s %p') AS formatted_timestamp FROM logs ORDER BY timestamp DESC LIMIT 1", (err, results) => {
         if (err) {
             console.error("❌ Error fetching data:", err);
             res.status(500).json({ error: "Database error" });
@@ -81,9 +81,8 @@ app.get("/get-data", (req, res) => {
     });
 });
 
-// ✅ API لجلب جميع القراءات السابقة (Logs)
 app.get("/logs", (req, res) => {
-    db.query("SELECT id, distance, DATE_FORMAT(timestamp, '%b %d %H:%i:%s') AS formatted_timestamp FROM logs ORDER BY timestamp DESC", (err, results) => {
+    db.query("SELECT id, distance, DATE_FORMAT(timestamp, '%b %d %h:%i:%s %p') AS formatted_timestamp FROM logs ORDER BY timestamp DESC", (err, results) => {
         if (err) {
             console.error("❌ Error fetching logs:", err);
             res.status(500).json({ error: "Database error" });
@@ -92,6 +91,7 @@ app.get("/logs", (req, res) => {
         }
     });
 });
+
 
 // ✅ Route لاختبار الاتصال بقاعدة البيانات يدويًا
 app.get("/test-db", (req, res) => {
