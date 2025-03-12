@@ -62,13 +62,20 @@ app.post("/send-data", (req, res) => {
 
 // ✅ API لجلب آخر قراءة من كل سينسور وحساب المتوسط
 app.get("/get-data", (req, res) => {
-    db.query("SELECT sensor1, sensor2, (sensor1 + sensor2) / 2 AS average, DATE_FORMAT(timestamp, '%b %d %h:%i:%s %p') AS timestamp FROM logs ORDER BY timestamp DESC LIMIT 1", (err, results) => {
+    db.query("SELECT sensor1, sensor2, timestamp FROM logs ORDER BY timestamp DESC LIMIT 1", (err, results) => {
         if (err) {
             console.error("❌ Error fetching data:", err);
-            res.status(500).json({ error: "Database error" });
-        } else {
-            res.json(results.length ? results[0] : { sensor1: 0, sensor2: 0, average: 0, timestamp: "N/A" });
+            return res.status(500).json({ error: "Database error" });
         }
+        if (results.length === 0) {
+            return res.json({ sensor1: 0, sensor2: 0, average: 0, timestamp: "N/A" });
+        }
+
+        const sensor1 = results[0].sensor1;
+        const sensor2 = results[0].sensor2;
+        const average = ((sensor1 + sensor2) / 2).toFixed(2);
+
+        res.json({ sensor1, sensor2, average, timestamp: results[0].timestamp });
     });
 });
 
@@ -85,10 +92,9 @@ app.get("/logs", (req, res) => {
 });
 
 // ✅ Route لتقديم الصفحة الرئيسية
-app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "index.html"));
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "public", "index.html"));
 });
-
 
 // ✅ تشغيل السيرفر
 app.listen(port, "0.0.0.0", () => {
