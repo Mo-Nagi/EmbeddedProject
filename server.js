@@ -94,6 +94,9 @@ app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "index.html"));
 });
 
+setInterval(() => {
+    console.log("🔄 Keeping server alive...");
+}, 18000000);
 
 // ✅ تشغيل السيرفر
 app.listen(port, "0.0.0.0", () => {
