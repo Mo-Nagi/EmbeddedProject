@@ -1,6 +1,5 @@
 const apiUrl = "https://embeddedproject-production.up.railway.app";
 
-// ✅ التأكد من تحميل الصفحة بالكامل قبل الوصول إلى العناصر
 document.addEventListener("DOMContentLoaded", () => {
     const logsPopup = document.getElementById("logsPopup");
     const showLogsBtn = document.getElementById("showLogs");
@@ -13,11 +12,11 @@ document.addEventListener("DOMContentLoaded", () => {
             if (!response.ok) throw new Error(`HTTP Error! Status: ${response.status}`);
             const data = await response.json();
             
-            console.log("📡 Data received:", data); // Debugging log
+            console.log("📡 Data received:", data);
             
             document.getElementById("data1").textContent = data.sensor1 ?? "N/A";
             document.getElementById("data2").textContent = data.sensor2 ?? "N/A";
-            document.getElementById("average").textContent = data.average?.toFixed(2) ?? "N/A";
+            document.getElementById("average").textContent = data.average ?? "N/A";
         } catch (error) {
             console.error("❌ Error fetching data:", error);
             document.getElementById("data1").textContent = "Error!";
@@ -34,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const logs = await response.json();
             const logsList = document.getElementById("logsList");
             logsList.innerHTML = logs.map(log => 
-                `<li>${log.timestamp}: Sensor 1: ${log.sensor1} cm | Sensor 2: ${log.sensor2} cm</li>`).join("");
+                `<li>${log.timestamp}: Sensor 1: ${log.sensor1} cm | Sensor 2: ${log.sensor2} cm | Average: ${log.average} cm</li>`).join("");
         } catch (error) {
             console.error("❌ Error fetching logs:", error);
         }
@@ -51,7 +50,6 @@ document.addEventListener("DOMContentLoaded", () => {
             logsPopup.style.display = "none";
         });
 
-        // ✅ إغلاق النافذة عند الضغط خارجها
         logsPopup.addEventListener("click", (event) => {
             if (event.target === logsPopup) {
                 logsPopup.style.display = "none";
