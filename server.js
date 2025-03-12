@@ -109,10 +109,7 @@ app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "index.html"));
 });
 
-// ✅ منع Railway من إيقاف السيرفر تلقائيًا بسبب عدم النشاط
-setInterval(() => {
-    console.log("🔄 Keeping server alive...");
-}, 30000);
+
 
 // ✅ التعامل مع إشارة الإيقاف SIGTERM من Railway
 process.on("SIGTERM", () => {
