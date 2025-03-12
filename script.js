@@ -1,5 +1,5 @@
 const apiUrl = "https://embeddedproject-production.up.railway.app";
-     
+
 // ✅ التأكد من تحميل الصفحة بالكامل قبل الوصول إلى العناصر
 document.addEventListener("DOMContentLoaded", () => {
     const logsPopup = document.getElementById("logsPopup");
