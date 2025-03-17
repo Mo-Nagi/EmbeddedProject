@@ -9,7 +9,7 @@ const port = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(cors());
-app.use(express.static(path.join(__dirname, "public"))); 
+app.use(express.static(__dirname));
 
 // ✅ إعداد الاتصال بقاعدة البيانات MySQL
 const db = mysql.createPool({
@@ -85,16 +85,13 @@ app.get("/logs", (req, res) => {
 
 // ✅ Route لتقديم الصفحة الرئيسية (يجب أن يكون في النهاية)
 app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "public", "index.html"));
+    res.sendFile(path.join(__dirname, "index.html"));
 });
 
 // ✅ منع الخادم من التوقف في Railway عبر تنفيذ `get-data` كل 10 دقائق
 setInterval(() => {
-    fetch(`http://localhost:${port}/get-data`)
-        .then(res => res.json())
-        .then(data => console.log("🔄 Server keep-alive:", data))
-        .catch(err => console.error("❌ Keep-alive error:", err));
-}, 600000); // كل 10 دقائق (10 * 60 * 1000 ms)
+    console.log("🔄 Keeping server alive...");
+}, 18000000);
 
 // ✅ تشغيل السيرفر
 app.listen(port, "0.0.0.0", () => {
