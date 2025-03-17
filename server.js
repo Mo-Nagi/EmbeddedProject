@@ -9,7 +9,7 @@ const port = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(cors());
-app.use(express.static(__dirname));
+app.use(express.static(path.join(__dirname, "public"))); 
 
 // ✅ إعداد الاتصال بقاعدة البيانات MySQL
 const db = mysql.createPool({
@@ -17,18 +17,10 @@ const db = mysql.createPool({
     user: process.env.MYSQLUSER || "root",
     password: process.env.MYSQLPASSWORD || "OflMbcDBHDpzxeBepIstEZGFYBYFElKD",
     database: process.env.MYSQLDATABASE || "railway",
-    port: process.env.MYSQLPORT || 3306
-    waitForConnections: true,
+    port: process.env.MYSQLPORT || 3306,
+    waitForConnections: true, 
     connectionLimit: 10,
     queueLimit: 0
-});
-
-db.connect(err => {
-    if (err) {
-        console.error("❌ MySQL Connection Failed:", err);
-    } else {
-        console.log("✅ Connected to MySQL Database");
-    }
 });
 
 // ✅ إنشاء جدول لو مش موجود
@@ -67,24 +59,15 @@ app.post("/send-data", (req, res) => {
 
 // ✅ API لجلب آخر قراءة من كل سينسور مع المتوسط
 app.get("/get-data", (req, res) => {
-    db.getConnection((err, connection) => {
+    db.query("SELECT sensor1, sensor2, average, timestamp FROM logs ORDER BY timestamp DESC LIMIT 1", (err, results) => {
         if (err) {
-            console.error("❌ Database connection error:", err);
-            return res.status(500).json({ error: "Database connection failed" });
+            console.error("❌ Error fetching data:", err);
+            return res.status(500).json({ error: "Database error" });
         }
-
-        connection.query("SELECT sensor1, sensor2, average, timestamp FROM logs ORDER BY timestamp DESC LIMIT 1", (err, results) => {
-            connection.release(); // ✅ تحرير الاتصال بعد الاستخدام
-
-            if (err) {
-                console.error("❌ Error fetching data:", err);
-                return res.status(500).json({ error: "Database error" });
-            }
-            if (results.length === 0) {
-                return res.json({ sensor1: 0, sensor2: 0, average: 0, timestamp: "N/A" });
-            }
-            res.json(results[0]);
-        });
+        if (results.length === 0) {
+            return res.json({ sensor1: 0, sensor2: 0, average: 0, timestamp: "N/A" });
+        }
+        res.json(results[0]);
     });
 });
 
@@ -100,15 +83,18 @@ app.get("/logs", (req, res) => {
     });
 });
 
-// ✅ Route لتقديم الصفحة الرئيسية
-
+// ✅ Route لتقديم الصفحة الرئيسية (يجب أن يكون في النهاية)
 app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "index.html"));
+    res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
+// ✅ منع الخادم من التوقف في Railway عبر تنفيذ `get-data` كل 10 دقائق
 setInterval(() => {
-    console.log("🔄 Keeping server alive...");
-}, 18000000);
+    fetch(`http://localhost:${port}/get-data`)
+        .then(res => res.json())
+        .then(data => console.log("🔄 Server keep-alive:", data))
+        .catch(err => console.error("❌ Keep-alive error:", err));
+}, 600000); // كل 10 دقائق (10 * 60 * 1000 ms)
 
 // ✅ تشغيل السيرفر
 app.listen(port, "0.0.0.0", () => {
