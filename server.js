@@ -12,14 +12,16 @@ app.use(cors());
 app.use(express.static(__dirname));
 
 // ✅ إعداد الاتصال بقاعدة البيانات MySQL
-const db = mysql.createConnection({
+const db = mysql.createPool({
     host: process.env.MYSQLHOST || "mysql.railway.internal",
     user: process.env.MYSQLUSER || "root",
     password: process.env.MYSQLPASSWORD || "OflMbcDBHDpzxeBepIstEZGFYBYFElKD",
     database: process.env.MYSQLDATABASE || "railway",
     port: process.env.MYSQLPORT || 3306
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
 });
-
 db.connect(err => {
     if (err) {
         console.error("❌ MySQL Connection Failed:", err);
@@ -64,15 +66,24 @@ app.post("/send-data", (req, res) => {
 
 // ✅ API لجلب آخر قراءة من كل سينسور مع المتوسط
 app.get("/get-data", (req, res) => {
-    db.query("SELECT sensor1, sensor2, average, timestamp FROM logs ORDER BY timestamp DESC LIMIT 1", (err, results) => {
+    db.getConnection((err, connection) => {
         if (err) {
-            console.error("❌ Error fetching data:", err);
-            return res.status(500).json({ error: "Database error" });
+            console.error("❌ Database connection error:", err);
+            return res.status(500).json({ error: "Database connection failed" });
         }
-        if (results.length === 0) {
-            return res.json({ sensor1: 0, sensor2: 0, average: 0, timestamp: "N/A" });
-        }
-        res.json(results[0]);
+
+        connection.query("SELECT sensor1, sensor2, average, timestamp FROM logs ORDER BY timestamp DESC LIMIT 1", (err, results) => {
+            connection.release(); // ✅ تحرير الاتصال بعد الاستخدام
+
+            if (err) {
+                console.error("❌ Error fetching data:", err);
+                return res.status(500).json({ error: "Database error" });
+            }
+            if (results.length === 0) {
+                return res.json({ sensor1: 0, sensor2: 0, average: 0, timestamp: "N/A" });
+            }
+            res.json(results[0]);
+        });
     });
 });
 
