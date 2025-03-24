@@ -11,7 +11,6 @@ app.use(express.json());
 app.use(cors());
 app.use(express.static(__dirname));
 
-// ✅ إعداد الاتصال بقاعدة البيانات MySQL
 const db = mysql.createPool({
     host: process.env.MYSQLHOST || "mysql.railway.internal",
     user: process.env.MYSQLUSER || "root",
@@ -38,7 +37,6 @@ db.query(createTableQuery, err => {
     else console.log("✅ Table 'logs' is ready!");
 });
 
-// ✅ API لاستقبال بيانات السينسورين وحفظها في MySQL مع المتوسط
 app.post("/send-data", (req, res) => {
     const { sensor1, sensor2 } = req.body;
     if (sensor1 !== undefined && sensor2 !== undefined) {
@@ -57,7 +55,6 @@ app.post("/send-data", (req, res) => {
     }
 });
 
-// ✅ API لجلب آخر قراءة من كل سينسور مع المتوسط
 app.get("/get-data", (req, res) => {
     db.query("SELECT sensor1, sensor2, average, timestamp FROM logs ORDER BY timestamp DESC LIMIT 1", (err, results) => {
         if (err) {
@@ -71,7 +68,6 @@ app.get("/get-data", (req, res) => {
     });
 });
 
-// ✅ API لجلب جميع القراءات السابقة (Logs)
 app.get("/logs", (req, res) => {
     db.query("SELECT sensor1, sensor2, average, DATE_FORMAT(timestamp, '%b %d %h:%i:%s %p') AS timestamp FROM logs ORDER BY timestamp DESC", (err, results) => {
         if (err) {
@@ -83,17 +79,14 @@ app.get("/logs", (req, res) => {
     });
 });
 
-// ✅ Route لتقديم الصفحة الرئيسية (يجب أن يكون في النهاية)
 app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "index.html"));
 });
 
-// ✅ منع الخادم من التوقف في Railway عبر تنفيذ `get-data` كل 10 دقائق
 setInterval(() => {
     console.log("🔄 Keeping server alive...");
 }, 18000000);
 
-// ✅ تشغيل السيرفر
 app.listen(port, "0.0.0.0", () => {
     console.log(`🚀 Server running at http://0.0.0.0:${port}`);
 });
