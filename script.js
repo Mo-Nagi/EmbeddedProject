@@ -5,7 +5,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const showLogsBtn = document.getElementById("showLogs");
     const closeLogsBtn = document.getElementById("closeLogs");
 
-    // ✅ جلب آخر قراءة من كل سينسور
     async function fetchData() {
         try {
             const response = await fetch(`${apiUrl}/get-data`);
@@ -25,7 +24,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // ✅ جلب جميع الـ Logs
     async function fetchLogs() {
         try {
             const response = await fetch(`${apiUrl}/logs`);
@@ -39,7 +37,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // ✅ التحكم في فتح/إغلاق نافذة الـ Popup
     if (showLogsBtn && logsPopup && closeLogsBtn) {
         showLogsBtn.addEventListener("click", () => {
             logsPopup.style.display = "flex";
