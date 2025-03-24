@@ -22,7 +22,6 @@ const db = mysql.createPool({
     queueLimit: 0
 });
 
-// ✅ إنشاء جدول لو مش موجود
 const createTableQuery = `
     CREATE TABLE IF NOT EXISTS logs (
         id INT AUTO_INCREMENT PRIMARY KEY,
