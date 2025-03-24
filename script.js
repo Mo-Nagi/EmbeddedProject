@@ -56,7 +56,6 @@ document.addEventListener("DOMContentLoaded", () => {
         console.error("❌ One or more elements (logsPopup, showLogsBtn, closeLogsBtn) not found!");
     }
 
-    // ✅ تحديث البيانات كل ثانية
     setInterval(fetchData, 1000);
     fetchData();
 });
