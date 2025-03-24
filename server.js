@@ -36,23 +36,7 @@ db.query(createTableQuery, err => {
     else console.log("✅ Table 'logs' is ready!");
 });
 
-app.post("/send-data", (req, res) => {
-    const { sensor1, sensor2 } = req.body;
-    if (sensor1 !== undefined && sensor2 !== undefined) {
-        const average = ((sensor1 + sensor2) / 2).toFixed(2);
-        db.query("INSERT INTO logs (sensor1, sensor2, average) VALUES (?, ?, ?)", [sensor1, sensor2, average], err => {
-            if (err) {
-                console.error("❌ Error inserting data:", err);
-                res.status(500).json({ error: "Database error" });
-            } else {
-                console.log(`📡 Data received: Sensor1=${sensor1} cm, Sensor2=${sensor2} cm, Average=${average} cm`);
-                res.json({ message: "Data saved successfully!" });
-            }
-        });
-    } else {
-        res.status(400).json({ error: "Invalid data!" });
-    }
-});
+
 
 app.get("/send-data", (req, res) => {
     const { sensor1, sensor2 } = req.query; 
@@ -76,6 +60,18 @@ app.get("/send-data", (req, res) => {
     }
 });
 
+app.get("/get-data", (req, res) => {
+    db.query("SELECT sensor1, sensor2, average, timestamp FROM logs ORDER BY timestamp DESC LIMIT 1", (err, results) => {
+        if (err) {
+            console.error("❌ Error fetching data:", err);
+            return res.status(500).json({ error: "Database error" });
+        }
+        if (results.length === 0) {
+            return res.json({ sensor1: 0, sensor2: 0, average: 0, timestamp: "N/A" });
+        }
+        res.json(results[0]);
+    });
+});
 
 app.get("/logs", (req, res) => {
     db.query("SELECT sensor1, sensor2, average, DATE_FORMAT(timestamp, '%b %d %h:%i:%s %p') AS timestamp FROM logs ORDER BY timestamp DESC", (err, results) => {
