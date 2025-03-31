@@ -192,33 +192,49 @@ canvas {
 
 #downloadBtn:hover {
     background-color: #368fd8;
-}
-.search-section {
+}/* ✅ تنسيق قسم القيم العليا والصغرى */
+.extreme-values-container {
+    width: 90%;
+    max-width: 800px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
     margin-top: 20px;
-    padding: 10px;
-    border: 1px solid #ddd;
-    background-color: #f9f9f9;
+    text-align: center;
 }
 
-#searchExtremeBtn {
+.extreme-values-container h2 {
+    font-size: 1.8em;
+    color: #4db8ff;
+    margin-bottom: 10px;
+}
+
+.extreme-values-container p {
+    font-size: 1.2em;
+    margin: 10px 0;
+    color: #ffcc00;
+    font-weight: bold;
+}
+
+.extreme-values-container .extreme-value {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #ffcc00;
+    margin: 10px 0;
+}
+
+.extreme-values-container button {
     padding: 10px 20px;
     font-size: 16px;
     background-color: #4CAF50;
     color: white;
     border: none;
     cursor: pointer;
-}
-
-#searchExtremeBtn:hover {
-    background-color: #45a049;
-}
-
-#extremeResults {
+    border-radius: 5px;
     margin-top: 20px;
 }
 
-#extremeResults p {
-    font-size: 16px;
-    margin: 5px 0;
+.extreme-values-container button:hover {
+    background-color: #45a049;
 }
-
