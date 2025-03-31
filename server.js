@@ -5,7 +5,6 @@ const mysql = require("mysql2");
 const path = require("path");
 const fs = require("fs");
 const { Parser } = require("json2csv");
-const path = require("path");
 const xlsx = require("xlsx");
 
 const app = express();
