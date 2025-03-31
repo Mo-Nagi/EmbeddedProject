@@ -117,17 +117,17 @@ app.get('/export/excel', (req, res) => {
 app.get('/extreme-values', (req, res) => {
   const query = `
     SELECT 
-      MAX(average) AS max_value, 
-      MIN(average) AS min_value, 
+      MAX(average) AS max_value,
+      MIN(average) AS min_value,
       (SELECT timestamp FROM logs WHERE average = MAX(average) LIMIT 1) AS max_timestamp,
       (SELECT timestamp FROM logs WHERE average = MIN(average) LIMIT 1) AS min_timestamp
-    FROM logs
+    FROM logs;
   `;
 
   db.query(query, (err, results) => {
     if (err) {
       console.error('Database error:', err);
-      return res.status(500).json({ error: 'Database error nagi test' });
+      return res.status(500).json({ error: 'Database error' });
     }
 
     // التأكد من وجود بيانات في النتائج
