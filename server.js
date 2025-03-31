@@ -114,24 +114,35 @@ app.get('/export/excel', (req, res) => {
 });
 
 
-app.get("/extreme-values", (req, res) => {
-    db.query(
-        `SELECT 
-            MAX(average) AS max_value, 
-            MIN(average) AS min_value, 
-            (SELECT timestamp FROM logs WHERE average = MAX(average) LIMIT 1) AS max_timestamp,
-            (SELECT timestamp FROM logs WHERE average = MIN(average) LIMIT 1) AS min_timestamp
-        FROM logs`,
-        (err, results) => {
-            if (err) {
-                console.error("❌ Error fetching extreme values:", err);
-                return res.status(500).json({ error: "Database error" });
-            }
+app.get('/extreme-values', (req, res) => {
+  const query = `
+    SELECT 
+      MAX(average) AS max_value, 
+      MIN(average) AS min_value, 
+      (SELECT timestamp FROM logs WHERE average = MAX(average) LIMIT 1) AS max_timestamp,
+      (SELECT timestamp FROM logs WHERE average = MIN(average) LIMIT 1) AS min_timestamp
+    FROM logs
+  `;
 
-            const extremeValues = results[0];
-            res.json(extremeValues);
-        }
-    );
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error('Database error:', err);
+      return res.status(500).json({ error: 'Database error nagi test' });
+    }
+
+    // التأكد من وجود بيانات في النتائج
+    if (results.length > 0) {
+      const extremeValues = results[0];
+      return res.json({
+        max_value: extremeValues.max_value,
+        min_value: extremeValues.min_value,
+        max_timestamp: extremeValues.max_timestamp,
+        min_timestamp: extremeValues.min_timestamp
+      });
+    } else {
+      return res.status(404).json({ error: 'No data found' });
+    }
+  });
 });
 
 
