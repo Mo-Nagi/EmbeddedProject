@@ -38,8 +38,8 @@ if (searchExtremeBtn) {
             const extremeValues = await response.json();
             console.log("Extreme Values:", extremeValues);
 
-            document.getElementById("maxValue").textContent = `Highest Value: ${extremeValues.max_value} cm at ${extremeValues.max_timestamp}`;
-            document.getElementById("minValue").textContent = `Lowest Value: ${extremeValues.min_value} cm at ${extremeValues.min_timestamp}`;
+            document.getElementById("maxValue").innerHTML = `${extremeValues.max_value} <span style="color: white;">cm at </span>${extremeValues.max_timestamp}</span>`;
+            document.getElementById("minValue").innerHTML = `${extremeValues.min_value} <span style="color: white;">cm at </span>${extremeValues.min_timestamp}</span>`;
         } catch (error) {
             console.error("❌ Error fetching extreme values:", error);
         }
