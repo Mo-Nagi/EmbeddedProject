@@ -27,6 +27,25 @@ document.addEventListener("DOMContentLoaded", () => {
     const downloadJsonBtn = document.getElementById("downloadJson");
     const dateFilter = document.getElementById("dateFilter");
     const compareBtn = document.getElementById("compareBtn");
+\const searchExtremeBtn = document.getElementById("searchExtremeBtn");
+
+if (searchExtremeBtn) {
+    searchExtremeBtn.addEventListener("click", async () => {
+        try {
+            const response = await fetch(`${apiUrl}/extreme-values`);
+            if (!response.ok) throw new Error(`HTTP Error! Status: ${response.status}`);
+
+            const extremeValues = await response.json();
+            console.log("Extreme Values:", extremeValues);
+
+            document.getElementById("maxValue").textContent = `Highest Value: ${extremeValues.max_value} cm at ${extremeValues.max_timestamp}`;
+            document.getElementById("minValue").textContent = `Lowest Value: ${extremeValues.min_value} cm at ${extremeValues.min_timestamp}`;
+        } catch (error) {
+            console.error("❌ Error fetching extreme values:", error);
+        }
+    });
+}
+
     document.addEventListener("DOMContentLoaded", () => {
         const popupContent = document.getElementById("logsContainer"); 
         const showLogsBtn = document.getElementById("showLogs");
