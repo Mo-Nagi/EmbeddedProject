@@ -10,6 +10,7 @@ body {
     align-items: center;
     justify-content: center;
     height: 100vh;
+    overflow-y: auto;
 }
 
 .container {
@@ -17,8 +18,9 @@ body {
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
-    width: 80%;
-    max-width: 500px;
+    width: 90%;
+    max-width: 600px;
+    margin-bottom: 20px;
 }
 
 h1 {
@@ -35,6 +37,8 @@ p {
     font-size: 1.5em;
     font-weight: bold;
     color: #ffcc00;
+    visibility: visible !important;
+    opacity: 1 !important;
 }
 
 button {
@@ -53,43 +57,139 @@ button:hover {
     background-color: #368fd8;
 }
 
-/* ✅ Popup Window for Logs */
-.popup {
-    display: none;
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    align-items: center;
-    justify-content: center;
-}
 
 .popup-content {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     background-color: white;
     color: black;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+    width: auto;
+    min-width: 800px;  
+    max-width: 90vw;
+    max-height: 400px;
+    padding: 20px;
+    display: none; 
+}
+
+#logs-content {
+    width: 100%;
+    max-height: 300px;
+    overflow-y: auto; 
+    padding: 10px;
+    text-align: left;
+}
+
+#logsList {
+    list-style: none;
+    padding: 0;
+    white-space: nowrap; 
+}
+
+#closeLogs {
+    display: block;
+    margin: 10px auto;
+    padding: 8px 15px;
+    background: #d9534f;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+#closeLogs:hover {
+    background: #c9302c;
+}
+
+
+.chart-container {
+    width: 90%;
+    max-width: 800px;
+    background: rgba(255, 255, 255, 0.1);
     padding: 20px;
     border-radius: 10px;
-    width: 50%;
-    text-align: center;
-    position: relative;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+    margin-top: 20px;
 }
 
-.close {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 24px;
+canvas {
+    width: 100% !important;
+    height: auto !important;
+}
+
+.download-buttons {
+    margin-top: 20px;
+}
+
+.download-buttons button {
+    margin: 5px;
+}
+
+.filter-container {
+    width: 90%;
+    max-width: 800px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+    margin-top: 20px;
+    text-align: center;
+}
+
+.filter-container input, .filter-container button {
+    margin: 5px;
+    padding: 10px;
+    font-size: 16px;
+}
+
+@media (max-width: 600px) {
+    .container, .popup-content, .chart-container, .filter-container {
+        width: 95%;
+    }
+
+    button {
+        font-size: 14px;
+        padding: 8px 12px;
+    }
+}
+
+.container {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+    width: 80%;
+    max-width: 500px;
+    text-align: center;
+    margin: 500px 0 0px 0;
+}
+
+.container h2 {
+    font-size: 1.8em;
+    color: #4db8ff;
+    margin-bottom: 10px;
+}
+
+.reading-value {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #ffcc00;
+    display: block;
+    margin: 5px 0;
+#downloadBtn {
+    padding: 10px 15px;
+    font-size: 16px;
+    margin-top: 20px;
     cursor: pointer;
-    background: none;
     border: none;
-    color: black;
+    border-radius: 5px;
+    background-color: #4db8ff;
+    color: white;
+    transition: background-color 0.3s;
 }
 
-ul {
-    list-style-position: inside;
-    padding: 0;
-    text-align: left;
+#downloadBtn:hover {
+    background-color: #368fd8;
 }
