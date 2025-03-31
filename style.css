@@ -193,3 +193,32 @@ canvas {
 #downloadBtn:hover {
     background-color: #368fd8;
 }
+.search-section {
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+}
+
+#searchExtremeBtn {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+#searchExtremeBtn:hover {
+    background-color: #45a049;
+}
+
+#extremeResults {
+    margin-top: 20px;
+}
+
+#extremeResults p {
+    font-size: 16px;
+    margin: 5px 0;
+}
+
