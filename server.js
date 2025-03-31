@@ -114,33 +114,26 @@ app.get('/export/excel', (req, res) => {
 });
 
 
-app.get("/search", (req, res) => {
-    const { startDate, endDate, minDepth, maxDepth } = req.query;
-    let query = "SELECT * FROM logs WHERE 1=1";
-    const params = [];
+app.get("/extreme-values", (req, res) => {
+    db.query(
+        `SELECT 
+            MAX(average) AS max_value, 
+            MIN(average) AS min_value, 
+            (SELECT timestamp FROM logs WHERE average = MAX(average) LIMIT 1) AS max_timestamp,
+            (SELECT timestamp FROM logs WHERE average = MIN(average) LIMIT 1) AS min_timestamp
+        FROM logs`,
+        (err, results) => {
+            if (err) {
+                console.error("❌ Error fetching extreme values:", err);
+                return res.status(500).json({ error: "Database error" });
+            }
 
-    if (startDate) {
-        query += " AND timestamp >= ?";
-        params.push(startDate);
-    }
-    if (endDate) {
-        query += " AND timestamp <= ?";
-        params.push(endDate);
-    }
-    if (minDepth) {
-        query += " AND average >= ?";
-        params.push(minDepth);
-    }
-    if (maxDepth) {
-        query += " AND average <= ?";
-        params.push(maxDepth);
-    }
-
-    db.query(query, params, (err, results) => {
-        if (err) return res.status(500).json({ error: "Database error" });
-        res.json(results);
-    });
+            const extremeValues = results[0];
+            res.json(extremeValues);
+        }
+    );
 });
+
 
 app.get("/compare", (req, res) => {
     const { date1, date2 } = req.query;
