@@ -115,29 +115,51 @@ app.get('/export/excel', (req, res) => {
 
 
 app.get('/extreme-values', (req, res) => {
-  const query = `
+  // استعلام للحصول على أعلى قيمة وأقل قيمة
+  const queryMaxMin = `
     SELECT 
       MAX(average) AS max_value,
-      MIN(average) AS min_value,
-      (SELECT timestamp FROM logs WHERE average = MAX(average) LIMIT 1) AS max_timestamp,
-      (SELECT timestamp FROM logs WHERE average = MIN(average) LIMIT 1) AS min_timestamp
+      MIN(average) AS min_value
     FROM logs;
   `;
 
-  db.query(query, (err, results) => {
+  db.query(queryMaxMin, (err, results) => {
     if (err) {
       console.error('Database error:', err);
       return res.status(500).json({ error: 'Database error' });
     }
 
-    // التأكد من وجود بيانات في النتائج
     if (results.length > 0) {
-      const extremeValues = results[0];
-      return res.json({
-        max_value: extremeValues.max_value,
-        min_value: extremeValues.min_value,
-        max_timestamp: extremeValues.max_timestamp,
-        min_timestamp: extremeValues.min_timestamp
+      const { max_value, min_value } = results[0];
+
+      // استعلام للحصول على التواريخ المقابلة للقيم العليا والصغرى
+      const queryMaxTimestamp = `
+        SELECT timestamp FROM logs WHERE average = ? LIMIT 1;
+      `;
+      
+      db.query(queryMaxTimestamp, [max_value], (err, maxTimestampResult) => {
+        if (err) {
+          console.error('Error fetching max timestamp:', err);
+          return res.status(500).json({ error: 'Error fetching max timestamp' });
+        }
+
+        const maxTimestamp = maxTimestampResult[0]?.timestamp;
+
+        db.query(queryMaxTimestamp, [min_value], (err, minTimestampResult) => {
+          if (err) {
+            console.error('Error fetching min timestamp:', err);
+            return res.status(500).json({ error: 'Error fetching min timestamp' });
+          }
+
+          const minTimestamp = minTimestampResult[0]?.timestamp;
+
+          return res.json({
+            max_value,
+            min_value,
+            max_timestamp: maxTimestamp,
+            min_timestamp: minTimestamp
+          });
+        });
       });
     } else {
       return res.status(404).json({ error: 'No data found' });
