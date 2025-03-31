@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const downloadJsonBtn = document.getElementById("downloadJson");
     const dateFilter = document.getElementById("dateFilter");
     const compareBtn = document.getElementById("compareBtn");
-\const searchExtremeBtn = document.getElementById("searchExtremeBtn");
+    const searchExtremeBtn = document.getElementById("searchExtremeBtn");
 
 if (searchExtremeBtn) {
     searchExtremeBtn.addEventListener("click", async () => {
