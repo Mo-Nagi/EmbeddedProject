@@ -239,3 +239,21 @@ canvas {
 .extreme-values-container button:hover {
     background-color: #45a049;
 }
+
+.extreme-values-container p {
+    font-size: 1.2em;
+    margin: 10px 0;
+    color: white; /* لون النص الأساسي سيكون أبيض */
+    font-weight: bold;
+}
+
+.extreme-values-container .extreme-value {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #ffcc00; /* القيمة نفسها باللون الأصفر */
+    margin: 10px 0;
+}
+
+.extreme-values-container .label {
+    color: white; /* كلمة "Max Value" أو "Min Value" ستكون باللون الأبيض */
+}
