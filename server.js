@@ -1,4 +1,4 @@
-/*require("dotenv").config();
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const mysql = require("mysql2");
@@ -192,5 +192,3 @@ setInterval(() => {
 app.listen(port, "0.0.0.0", () => {
     console.log(`🚀 Server running at http://0.0.0.0:${port}`);
 });
-
-*/
