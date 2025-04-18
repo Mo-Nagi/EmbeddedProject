@@ -1,4 +1,4 @@
-const apiUrl = "https://embeddedproject-production.up.railway.app";
+/*const apiUrl = "https://embeddedproject-production.up.railway.app";
 
 let depthChart;
 const ctx = document.getElementById("depthChart").getContext("2d");
@@ -260,7 +260,7 @@ function updateChart(labels, sensor1, sensor2, average) {
             }
         }
     });
-}
+}*/
 
 fetchChartData();
 setInterval(fetchChartData, 5000);
