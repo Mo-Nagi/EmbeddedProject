@@ -1,4 +1,4 @@
-const apiUrl = "https://embeddedproject-production.up.railway.app";
+const apiUrl = "https://embeddedsysproject.netlify.app";
 
 let depthChart;
 const ctx = document.getElementById("depthChart").getContext("2d");
