@@ -193,7 +193,7 @@ canvas {
 
 #downloadBtn:hover {
     background-color: #368fd8;
-}/* ✅ تنسيق قسم القيم العليا والصغرى */
+
 .extreme-values-container {
     width: 90%;
     max-width: 800px;
@@ -243,17 +243,17 @@ canvas {
 .extreme-values-container p {
     font-size: 1.2em;
     margin: 10px 0;
-    color: white; /* لون النص الأساسي سيكون أبيض */
+    color: white; 
     font-weight: bold;
 }
 
 .extreme-values-container .extreme-value {
     font-size: 1.5em;
     font-weight: bold;
-    color: #ffcc00; /* القيمة نفسها باللون الأصفر */
+    color: #ffcc00; 
     margin: 10px 0;
 }
 
 .extreme-values-container .label {
-    color: white; /* كلمة "Max Value" أو "Min Value" ستكون باللون الأبيض */
+    color: white;  
 }
