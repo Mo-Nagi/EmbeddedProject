@@ -115,7 +115,7 @@ app.get('/export/excel', (req, res) => {
 
 
 app.get('/extreme-values', (req, res) => {
-  // استعلام للحصول على أعلى قيمة وأقل قيمة
+  
   const queryMaxMin = `
     SELECT 
       MAX(average) AS max_value,
@@ -132,7 +132,7 @@ app.get('/extreme-values', (req, res) => {
     if (results.length > 0) {
       const { max_value, min_value } = results[0];
 
-      // استعلام للحصول على التواريخ المقابلة للقيم العليا والصغرى
+      
       const queryMaxTimestamp = `
         SELECT timestamp FROM logs WHERE average = ? LIMIT 1;
       `;
